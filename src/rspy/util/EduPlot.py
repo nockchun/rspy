@@ -4,7 +4,7 @@ from functools import wraps
 
 class EduPlotConf(object):
     def __init__(
-        self, font='serif', fontSize=5, dpi=160, figScale=1, linewidth=1, markersize=4,
+        self, dpi=160, figScale=1, linewidth=1, markersize=4, font='serif', fontSize=5, textFontSize=6,
         gridParams = {'linewidth': 0.2, 'alpha': 0.5},
         quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.005, "headwidth":5, "headaxislength":3}
     ):
@@ -16,6 +16,7 @@ class EduPlotConf(object):
         self.markersize = markersize
         self.gridParams = gridParams
         self.quiverParams = quiverParams
+        self.textFontSize = textFontSize
         
     def set(self):
         rc('font', family=self.font, size=self.fontSize)
