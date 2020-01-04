@@ -1,3 +1,7 @@
+import numpy as np
+from matplotlib import pyplot, ticker, get_backend, rc
+from functools import wraps
+
 class EduPlotConf(object):
     def __init__(
         self, font='serif', fontSize=5, dpi=160, figScale=1, linewidth=1, markersize=4,
