@@ -6,7 +6,7 @@ class EduPlotConf(object):
     def __init__(
         self, dpi=160, figScale=1, linewidth=1, markersize=4, font='serif', fontSize=5, textFontSize=6,
         gridParams = {'linewidth': 0.2, 'alpha': 0.5},
-        quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.005, "headwidth":5, "headaxislength":3}
+        quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3}
     ):
         self.font = font
         self.fontSize = fontSize
