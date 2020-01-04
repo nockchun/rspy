@@ -25,11 +25,10 @@ class EduPlotConf(object):
 
 class EduPlot2D(object):
     def __init__(self, conf=EduPlotConf()):
-        self._vectors   = {}
-        self._functions = {}
-        self._markers   = {}
-        self._conf      = conf
+        self._conf = conf
         conf.set()
+        self._items = {}
+        self.clear()
         
     def genSpace(self, xLim, yLim=None, title=None):
         # input check
@@ -66,19 +65,28 @@ class EduPlot2D(object):
         self._axis.spines['top'].set_color('none')
         
         # draw plot
-        for name in self._vectors:
-            self._axis.quiver(self._vectors[name]["origins"][:,0], self._vectors[name]["origins"][:,1],
-                              self._vectors[name]["vectors"][:,0], self._vectors[name]["vectors"][:,1],
-                              color=self._vectors[name]["color"], **self._conf.quiverParams)
+        item = self._items["vectors"]
+        for name in item:
+            self._axis.quiver(item[name]["origins"][:,0], item[name]["origins"][:,1],
+                              item[name]["vectors"][:,0], item[name]["vectors"][:,1],
+                              color=item[name]["color"], **self._conf.quiverParams)
             
-        for name in self._functions:
-            x = np.linspace(xLim[0], xLim[1], self._functions[name]["linespace"])
-            y = eval(self._functions[name]["expression"])
-            pyplot.plot(x, y, self._functions[name]["color"])
-            
-        for name in self._markers:
-            pyplot.plot(self._markers[name]["positions"][:,0], self._markers[name]["positions"][:,1], marker=".",
-                        linewidth=0, color=self._markers[name]["color"])
+        item = self._items["functions"]
+        for name in item:
+            x = np.linspace(xLim[0], xLim[1], item[name]["linespace"])
+            y = eval(item[name]["expression"])
+            pyplot.plot(x, y, item[name]["color"])
+        
+        item = self._items["markers"]
+        for name in item:
+            pyplot.plot(item[name]["positions"][:,0], item[name]["positions"][:,1],
+                        marker=".", linewidth=0, color=item[name]["color"])
+        
+        item = self._items["texts"]
+        for name in item:
+            for idx, position in enumerate(item[name]["positions"]):
+                pyplot.text(position[0], position[1], item[name]["texts"][idx], color=item[name]["color"],
+                            horizontalalignment=item[name]["hAlign"], verticalalignment=item[name]["vAlign"], wrap=True, fontsize=self._conf.textFontSize)
             
     def addVector(self, vectors, origins=None, name="vector", color="#0000FF"):
         vectors = np.array(vectors)
@@ -98,13 +106,18 @@ class EduPlot2D(object):
         else:
             assert origins.shape == vectors.shape, "vectors and tail must have a same shape"
             
-        self._vectors[name] = {"vectors":vectors, "origins":origins, "color":color}
+        self._items["vectors"][name] = {"vectors":vectors, "origins":origins, "color":color}
     
     def addFunction(self, expX_ForY="x**2", linespace=100, name="function", color="#FF0000"):
-        self._functions[name] = {"expression":expX_ForY, "linespace":linespace, "color":color}
+        self._items["functions"][name] = {"expression":expX_ForY, "linespace":linespace, "color":color}
         
     def addMarker(self, positions, mark=".", name="marker", color="#00FF00"):
-        self._markers[name] = {"positions":np.array(positions), "mark":mark, "color":color}
+        positions = np.array(positions)
+        self._items["markers"][name] = {"positions":positions, "mark":mark, "color":color}
+        
+    def addText(self, positions, texts, name="text", color="#000000", hAlign="center", vAlign="bottom"):
+        assert len(positions) == len(texts), "positions and texts must have a same size."
+        self._items["texts"][name] = {"positions":positions, "texts":texts, "color":color, "hAlign":hAlign, "vAlign":vAlign}
         
     def setConf(self, conf):
         self._conf = conf
@@ -112,3 +125,9 @@ class EduPlot2D(object):
     
     def getConf(self):
         return self._conf
+    
+    def clear(self):
+        self._items["vectors"] = {}
+        self._items["functions"] = {}
+        self._items["markers"] = {}
+        self._items["texts"] = {}
