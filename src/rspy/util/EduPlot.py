@@ -88,7 +88,9 @@ class EduPlot2D(object):
             for idx, position in enumerate(item[name]["positions"]):
                 pyplot.text(position[0], position[1], item[name]["texts"][idx], color=item[name]["color"],
                             horizontalalignment=item[name]["hAlign"], verticalalignment=item[name]["vAlign"], wrap=True, fontsize=self._conf.textFontSize)
-            
+        pyplot.close()
+        return self.getFigure()
+    
     def addVector(self, vectors, origins=None, name="vector", color="#0000FF"):
         vectors = np.array(vectors)
         assert vectors.shape[1] == 2, "Each vector should have 2 elements."  
@@ -126,6 +128,9 @@ class EduPlot2D(object):
     
     def getConf(self):
         return self._conf
+    
+    def getFigure(self):
+        return self._figure
     
     def clear(self):
         self._items["vectors"] = {}
