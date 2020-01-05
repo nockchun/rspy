@@ -60,8 +60,8 @@ class EduPlot2D(object):
 
         # draw grid lines
         for i in range(x.size):
-            self._axis.plot(X[:,i], Y[:,i], c="#A8DADC", **grid_params)
-            self._axis.plot(X[i,:], Y[i,:], c="#EAD2AC", **grid_params)
+            self._axis.plot(X[:,i], Y[:,i], c="#A8DADC", **self._conf.gridParams)
+            self._axis.plot(X[i,:], Y[i,:], c="#EAD2AC", **self._conf.gridParams)
             
         self._axis.spines['left'].set_color("#A8DADC")
         self._axis.spines['bottom'].set_color("#EAD2AC")
