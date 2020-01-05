@@ -67,6 +67,14 @@ class EduPlot2D(object):
         self._axis.spines['bottom'].set_color("#EAB529")
         self._axis.spines['left'].set_linewidth(0.3)
         self._axis.spines['bottom'].set_linewidth(0.3)
+    
+    def _transVector(self, transMatrix, arrays):
+        if transMatrix is None:
+            return arrays
+        result = []
+        for item in arrays:
+            result.append(transMatrix.dot(item))
+        return np.array(result)
 
     def genSpace(self, xLim, yLim=None, title=None, transMatrix=None):
         # input check
@@ -102,24 +110,27 @@ class EduPlot2D(object):
         # draw plot
         item = self._items["vectors"]
         for name in item:
-            self._axis.quiver(item[name]["origins"][:,0], item[name]["origins"][:,1],
-                              item[name]["vectors"][:,0], item[name]["vectors"][:,1],
+            vectors = self._transVector(transMatrix, item[name]["vectors"])
+            origins = self._transVector(transMatrix, item[name]["origins"])
+            self._axis.quiver(origins[:,0], origins[:,1], vectors[:,0], vectors[:,1],
                               color=item[name]["color"], **self._conf.quiverParams)
             
         item = self._items["functions"]
         for name in item:
             x = np.linspace(xLim[0], xLim[1], item[name]["linespace"])
             y = eval(item[name]["expression"])
-            pyplot.plot(x, y, item[name]["color"])
+            array = self._transVector(transMatrix, [ (i, j) for i, j in zip(x, y)])
+            pyplot.plot(array[:,0], array[:,1], item[name]["color"])
         
         item = self._items["markers"]
         for name in item:
-            pyplot.plot(item[name]["positions"][:,0], item[name]["positions"][:,1],
-                        marker=".", linewidth=0, color=item[name]["color"])
+            positions = self._transVector(transMatrix, item[name]["positions"])
+            pyplot.plot(positions[:,0], positions[:,1], marker=".", linewidth=0, color=item[name]["color"])
         
         item = self._items["texts"]
         for name in item:
-            for idx, position in enumerate(item[name]["positions"]):
+            positions = self._transVector(transMatrix, item[name]["positions"])
+            for idx, position in enumerate(positions):
                 pyplot.text(position[0], position[1], item[name]["texts"][idx], color=item[name]["color"],
                             horizontalalignment=item[name]["hAlign"], verticalalignment=item[name]["vAlign"], wrap=True, fontsize=self._conf.textFontSize)
         pyplot.close()
