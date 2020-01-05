@@ -7,7 +7,7 @@ class EduPlotConf(object):
         self, dpi=160, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font='serif', fontSize=5, textFontSize=6,
         gridParams = {'linewidth': 0.6, 'alpha': 0.3},
         quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3},
-        titleParam = {"titlesize":8, "titleweight":"bold"}
+        titleParam = {"titlesize":7, "titleweight":"bold"}
     ):
         self.font = font
         self.fontSize = fontSize
