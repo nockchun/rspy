@@ -120,6 +120,7 @@ class EduPlot2D(object):
             x = np.linspace(xLim[0], xLim[1], item[name]["linespace"])
             y = eval(item[name]["expression"])
             array = self._transVector(transMatrix, [ (i, j) for i, j in zip(x, y)])
+            array = np.array(array)
             pyplot.plot(array[:,0], array[:,1], item[name]["color"])
         
         item = self._items["markers"]
