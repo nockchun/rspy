@@ -5,7 +5,7 @@ from functools import wraps
 class EduPlotConf(object):
     def __init__(
         self, dpi=160, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font='serif', fontSize=5, textFontSize=6,
-        gridParams = {'linewidth': 0.3, 'alpha': 0.2},
+        gridParams = {'linewidth': 0.6, 'alpha': 0.3},
         quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3},
         titleParam = {"titlesize":10, "titleweight":"bold"}
     ):
@@ -60,11 +60,11 @@ class EduPlot2D(object):
 
         # draw grid lines
         for i in range(x.size):
-            self._axis.plot(X[:,i], Y[:,i], c="#A8DADC", **self._conf.gridParams)
-            self._axis.plot(X[i,:], Y[i,:], c="#EAD2AC", **self._conf.gridParams)
+            self._axis.plot(X[:,i], Y[:,i], c="#3D076A", **self._conf.gridParams)
+            self._axis.plot(X[i,:], Y[i,:], c="#EAB529", **self._conf.gridParams)
             
-        self._axis.spines['left'].set_color("#A8DADC")
-        self._axis.spines['bottom'].set_color("#EAD2AC")
+        self._axis.spines['left'].set_color("#3D076A")
+        self._axis.spines['bottom'].set_color("#EAB529")
         self._axis.spines['left'].set_linewidth(0.3)
         self._axis.spines['bottom'].set_linewidth(0.3)
 
