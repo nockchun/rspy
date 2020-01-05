@@ -4,24 +4,28 @@ from functools import wraps
 
 class EduPlotConf(object):
     def __init__(
-        self, dpi=160, figScale=1, linewidth=1, markersize=4, font='serif', fontSize=5, textFontSize=6,
-        gridParams = {'linewidth': 0.2, 'alpha': 0.5},
-        quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3}
+        self, dpi=160, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font='serif', fontSize=5, textFontSize=6,
+        gridParams = {'linewidth': 0.3, 'alpha': 0.2},
+        quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3},
+        titleParam = {"titlesize":10, "titleweight":"bold"}
     ):
         self.font = font
         self.fontSize = fontSize
+        self.textFontSize = textFontSize
         self.dpi = dpi
         self.figSize = np.array([3,3]) * figScale
-        self.linewidth = linewidth
-        self.markersize = markersize
+        self.lineWidth = lineWidth
+        self.axisWidth = axisWidth
+        self.markerSize = markerSize
         self.gridParams = gridParams
         self.quiverParams = quiverParams
-        self.textFontSize = textFontSize
+        self.titleParam = titleParam
         
     def set(self):
         rc('font', family=self.font, size=self.fontSize)
         rc('figure', dpi=self.dpi)
-        rc('lines', linewidth=self.linewidth, markersize=self.markersize)
+        rc('lines', linewidth=self.lineWidth, markersize=self.markerSize)
+        rc('axes', titlesize=self.titleParam["titlesize"], titleweight=self.titleParam["titleweight"])
 
 
 class EduPlot2D(object):
@@ -30,8 +34,41 @@ class EduPlot2D(object):
         conf.set()
         self._items = {}
         self.clear()
-        
-    def genSpace(self, xLim, yLim=None, title=None):
+    
+    def _baseSpace(self):
+        xticks = self._axis.get_xticks()
+        yticks = self._axis.get_yticks()
+        dx = xticks[1] - xticks[0]
+        dy = yticks[1] - yticks[0]
+        base = max(int(min(dx, dy)), 1)   # grid interval is always an integer
+        loc = ticker.MultipleLocator(base=base)
+        self._axis.xaxis.set_major_locator(loc)
+        self._axis.yaxis.set_major_locator(loc)
+        self._axis.grid(True, **self._conf.gridParams)
+        self._axis.spines['left'].set_linewidth(self._conf.axisWidth)
+        self._axis.spines['bottom'].set_linewidth(self._conf.axisWidth)
+    
+    def _transSpace(self, transMatrix):
+        grid_range = 20
+        x = np.arange(-grid_range, grid_range+1)
+        X_, Y_ = np.meshgrid(x,x)
+        I = transMatrix[:,0]
+        J = transMatrix[:,1]
+        X = I[0]*X_ + J[0]*Y_
+        Y = I[1]*X_ + J[1]*Y_
+        origin = np.zeros(1)
+
+        # draw grid lines
+        for i in range(x.size):
+            self._axis.plot(X[:,i], Y[:,i], c="#A8DADC", **grid_params)
+            self._axis.plot(X[i,:], Y[i,:], c="#EAD2AC", **grid_params)
+            
+        self._axis.spines['left'].set_color("#A8DADC")
+        self._axis.spines['bottom'].set_color("#EAD2AC")
+        self._axis.spines['left'].set_linewidth(0.3)
+        self._axis.spines['bottom'].set_linewidth(0.3)
+
+    def genSpace(self, xLim, yLim=None, title=None, transMatrix=None):
         # input check
         if isinstance(xLim, int): xLim = [-xLim, xLim]
         else: assert len(xLim) == 2, "xLim should have 2 elements list. [-2, 4]"
@@ -44,21 +81,18 @@ class EduPlot2D(object):
             
         # create panal with limit
         self._figure, self._axis = pyplot.subplots(figsize=self._conf.figSize)
-        if title is not None: self._figure.suptitle(title);
+        if title is not None: self._axis.set_title(title)#self._figure.suptitle(title)
         self._axis.set_xlim(xLim)
         self._axis.set_ylim(yLim)
         self._axis.set_aspect('equal')
-
-        xticks = self._axis.get_xticks()
-        yticks = self._axis.get_yticks()
-        dx = xticks[1] - xticks[0]
-        dy = yticks[1] - yticks[0]
-        base = max(int(min(dx, dy)), 1)   # grid interval is always an integer
-        loc = ticker.MultipleLocator(base=base)
-        self._axis.xaxis.set_major_locator(loc)
-        self._axis.yaxis.set_major_locator(loc)
-        self._axis.grid(True, **self._conf.gridParams)
-
+        
+        # generate grid
+        if transMatrix is None: self._baseSpace()
+        else:
+            transMatrix = np.array(transMatrix)
+            assert transMatrix.shape == (2,2), "the input matrix must have a shape of (2,2)"
+            self._transSpace(transMatrix)
+        
         # show x-y axis in the center, hide frames
         self._axis.spines['left'].set_position(('data', 0))
         self._axis.spines['bottom'].set_position(('data', 0))
