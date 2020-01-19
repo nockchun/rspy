@@ -139,7 +139,7 @@ class EduPlot2D(object):
         item = self._items["markers"]
         for name in item:
             positions = self._transVector(transMatrix, item[name]["positions"])
-            pyplot.plot(positions[:,0], positions[:,1], marker=".", linewidth=0, color=item[name]["color"])
+            pyplot.plot(positions[:,0], positions[:,1], marker=item[name]["marker"], linewidth=0, color=item[name]["color"])
         
         item = self._items["texts"]
         for name in item:
@@ -176,9 +176,9 @@ class EduPlot2D(object):
     def addXYData(self, x, y, name="xydata", color="#0000FF"):
         self._items["xydata"][name] = {"x":x, "y":y, "color":color}
         
-    def addMarker(self, positions, mark=".", name="marker", color="#00FF00"):
+    def addMarker(self, positions, marker=".", name="marker", color="#00FF00"):
         positions = np.array(positions)
-        self._items["markers"][name] = {"positions":positions, "mark":mark, "color":color}
+        self._items["markers"][name] = {"positions":positions, "marker":marker, "color":color}
         
     def addText(self, positions, texts, name="text", color="#000000", hAlign="center", vAlign="bottom"):
         assert len(positions) == len(texts), "positions and texts must have a same size."
