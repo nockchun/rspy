@@ -5,10 +5,10 @@ import re
 
 class EduPlotConf(object):
     def __init__(
-        self, dpi=130, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font='serif', fontSize=5, textFontSize=6,
-        gridParams = {'linewidth': 0.6, 'alpha': 0.3},
-        quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3},
-        axisParam = {"titlesize":8, "titleweight":"bold", "unicode_minus":False}
+        self, dpi=120, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font="serif", fontSize=5, textFontSize=6,
+        gridParams   = {"linewidth": 0.6, "alpha": 0.3},
+        quiverParams = {"angles": "xy", "scale_units": "xy", "scale": 1, "width": 0.007, "headwidth":5, "headaxislength":3},
+        axisParam    = {"titlesize":8, "titleweight":"bold", "unicode_minus":False}
     ):
         self.font = font
         self.fontSize = fontSize
@@ -23,10 +23,10 @@ class EduPlotConf(object):
         self.axisParam = axisParam
         
     def set(self):
-        rc('font', family=self.font, size=self.fontSize)
-        rc('figure', dpi=self.dpi)
-        rc('lines', linewidth=self.lineWidth, markersize=self.markerSize)
-        rc('axes', titlesize=self.axisParam["titlesize"], titleweight=self.axisParam["titleweight"], unicode_minus=self.axisParam["unicode_minus"])
+        rc("font", family=self.font, size=self.fontSize)
+        rc("figure", dpi=self.dpi)
+        rc("lines", linewidth=self.lineWidth, markersize=self.markerSize)
+        rc("axes", titlesize=self.axisParam["titlesize"], titleweight=self.axisParam["titleweight"], unicode_minus=self.axisParam["unicode_minus"])
 
     def getFontsList(self, hintRegex=""):
         regex = re.compile(hintRegex, re.IGNORECASE)
@@ -50,8 +50,8 @@ class EduPlot2D(object):
         self._axis.xaxis.set_major_locator(loc)
         self._axis.yaxis.set_major_locator(loc)
         self._axis.grid(True, **self._conf.gridParams)
-        self._axis.spines['left'].set_linewidth(self._conf.axisWidth)
-        self._axis.spines['bottom'].set_linewidth(self._conf.axisWidth)
+        self._axis.spines["left"].set_linewidth(self._conf.axisWidth)
+        self._axis.spines["bottom"].set_linewidth(self._conf.axisWidth)
     
     def _transSpace(self, transMatrix):
         grid_range = 20
@@ -68,10 +68,10 @@ class EduPlot2D(object):
             self._axis.plot(X[:,i], Y[:,i], c="#3D076A", **self._conf.gridParams)
             self._axis.plot(X[i,:], Y[i,:], c="#EAB529", **self._conf.gridParams)
             
-        self._axis.spines['left'].set_color("#3D076A")
-        self._axis.spines['bottom'].set_color("#EAB529")
-        self._axis.spines['left'].set_linewidth(0.3)
-        self._axis.spines['bottom'].set_linewidth(0.3)
+        self._axis.spines["left"].set_color("#3D076A")
+        self._axis.spines["bottom"].set_color("#EAB529")
+        self._axis.spines["left"].set_linewidth(0.3)
+        self._axis.spines["bottom"].set_linewidth(0.3)
     
     def _transVector(self, transMatrix, arrays):
         if transMatrix is None:
@@ -97,7 +97,7 @@ class EduPlot2D(object):
         if title is not None: self._axis.set_title(title)
         self._axis.set_xlim(xLim)
         self._axis.set_ylim(yLim)
-        self._axis.set_aspect('equal')
+        self._axis.set_aspect("equal")
         
         # generate grid
         if transMatrix is None: self._baseSpace()
@@ -107,10 +107,10 @@ class EduPlot2D(object):
             self._transSpace(transMatrix)
         
         # show x-y axis in the center, hide frames
-        self._axis.spines['left'].set_position(('data', 0))
-        self._axis.spines['bottom'].set_position(('data', 0))
-        self._axis.spines['right'].set_color('none')
-        self._axis.spines['top'].set_color('none')
+        self._axis.spines["left"].set_position(("data", 0))
+        self._axis.spines["bottom"].set_position(("data", 0))
+        self._axis.spines["right"].set_color("none")
+        self._axis.spines["top"].set_color("none")
         
         # draw plot
         item = self._items["vectors"]

@@ -1,4 +1,4 @@
-import math, re
+import math, re, warnings, logging
 import ipywidgets as ipw
 from matplotlib import font_manager
 
@@ -45,3 +45,9 @@ def showMulti(*args, colSize=None, width="100%", margin="3px"):
 def getSystemFonts(hintRegex=""):
     regex = re.compile(hintRegex, re.IGNORECASE)
     return [{f.name: f.fname} for f in font_manager.fontManager.ttflist if regex.search(f.fname)]
+
+def setSystemWarning(off=True):
+    warnings.filterwarnings(action="ignore" if off else "default")
+    logging.getLogger("tensorflow").setLevel(logging.FATAL if off else logging.INFO)
+
+
