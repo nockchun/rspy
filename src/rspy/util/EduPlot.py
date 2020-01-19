@@ -147,8 +147,8 @@ class EduPlot2D(object):
             for idx, position in enumerate(positions):
                 pyplot.text(position[0], position[1], item[name]["texts"][idx], color=item[name]["color"],
                             horizontalalignment=item[name]["hAlign"], verticalalignment=item[name]["vAlign"], wrap=True, fontsize=self._conf.textFontSize)
+        pyplot.show()
         pyplot.close()
-        return self.getFigure()
     
     def addVector(self, vectors, origins=None, name="vector", color="#0000FF"):
         vectors = np.array(vectors)
