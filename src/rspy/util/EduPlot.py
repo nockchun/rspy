@@ -8,7 +8,7 @@ class EduPlotConf(object):
         self, dpi=130, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font='serif', fontSize=5, textFontSize=6,
         gridParams = {'linewidth': 0.6, 'alpha': 0.3},
         quiverParams = {'angles': 'xy', 'scale_units': 'xy', 'scale': 1, 'width': 0.007, "headwidth":5, "headaxislength":3},
-        titleParam = {"titlesize":7, "titleweight":"bold"}
+        axisParam = {"titlesize":8, "titleweight":"bold", "unicode_minus":False}
     ):
         self.font = font
         self.fontSize = fontSize
@@ -20,13 +20,13 @@ class EduPlotConf(object):
         self.markerSize = markerSize
         self.gridParams = gridParams
         self.quiverParams = quiverParams
-        self.titleParam = titleParam
+        self.axisParam = axisParam
         
     def set(self):
         rc('font', family=self.font, size=self.fontSize)
         rc('figure', dpi=self.dpi)
         rc('lines', linewidth=self.lineWidth, markersize=self.markerSize)
-        rc('axes', titlesize=self.titleParam["titlesize"], titleweight=self.titleParam["titleweight"])
+        rc('axes', titlesize=self.axisParam["titlesize"], titleweight=self.axisParam["titleweight"], unicode_minus=self.axisParam["unicode_minus"])
 
     def getFontsList(self, hintRegex=""):
         regex = re.compile(hintRegex, re.IGNORECASE)
