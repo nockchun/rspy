@@ -197,5 +197,6 @@ class EduPlot2D(object):
     def clear(self):
         self._items["vectors"] = {}
         self._items["functions"] = {}
+        self._items["xydata"] = {}
         self._items["markers"] = {}
         self._items["texts"] = {}
