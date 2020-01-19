@@ -15,7 +15,7 @@ class EduPlotConf(object):
         self.fontSize = fontSize
         self.textFontSize = textFontSize
         self.dpi = dpi
-        self.figSize = np.array([2, 2]) * figScale
+        self.figSize = np.array([2, 2]) * figScale * 2
         self.lineWidth = lineWidth
         self.axisWidth = axisWidth
         self.markerSize = markerSize
