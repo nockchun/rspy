@@ -86,10 +86,10 @@ class EduPlot2D(object):
         return np.array(result)
 
     def genSpaceFigure(self, xLim, yLim=None, title=None, transMatrix=None):
-        self.genSpace(xLim, yLim, title, transMatrix)
+        self.genSpace(xLim, yLim, title, transMatrix, False)
         return self._figure
 
-    def genSpace(self, xLim, yLim=None, title=None, transMatrix=None):
+    def genSpace(self, xLim, yLim=None, title=None, transMatrix=None, show=True):
         # input check
         if isinstance(xLim, int): xLim = [-xLim, xLim]
         else: assert len(xLim) == 2, "xLim should have 2 elements list. [-2, 4]"
@@ -151,7 +151,7 @@ class EduPlot2D(object):
             for idx, position in enumerate(positions):
                 pyplot.text(position[0], position[1], item[name]["texts"][idx], color=item[name]["color"],
                             horizontalalignment=item[name]["hAlign"], verticalalignment=item[name]["vAlign"], wrap=True, fontsize=self._conf.textFontSize)
-        pyplot.show()
+        if show: pyplot.show()
         pyplot.close()
     
     def addVector(self, vectors, origins=None, name="vector", color="#0000FF"):
