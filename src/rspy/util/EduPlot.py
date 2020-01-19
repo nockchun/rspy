@@ -5,7 +5,7 @@ import re
 
 class EduPlotConf(object):
     def __init__(
-        self, dpi=120, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font="serif", fontSize=5, textFontSize=6,
+        self, dpi=100, figScale=1, lineWidth=1, axisWidth=0.7, markerSize=4, font="serif", fontSize=7, textFontSize=8,
         gridParams   = {"linewidth": 0.6, "alpha": 0.3},
         quiverParams = {"angles": "xy", "scale_units": "xy", "scale": 1, "width": 0.007, "headwidth":5, "headaxislength":3},
         axisParam    = {"titlesize":8, "titleweight":"bold", "unicode_minus":False}
@@ -14,7 +14,7 @@ class EduPlotConf(object):
         self.fontSize = fontSize
         self.textFontSize = textFontSize
         self.dpi = dpi
-        self.figSize = np.array([2,2]) * figScale
+        self.figSize = np.array([2, 2]) * figScale
         self.lineWidth = lineWidth
         self.axisWidth = axisWidth
         self.markerSize = markerSize
