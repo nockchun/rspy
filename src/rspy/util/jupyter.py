@@ -42,6 +42,6 @@ def showMulti(*args, colSize=None, width="100%", margin="3px"):
             idxOuts += 1
     display(grid)
 
-def getFontsList(self, hintRegex=""):
+def getSystemFonts(self, hintRegex=""):
     regex = re.compile(hintRegex, re.IGNORECASE)
     return [{f.name: f.fname} for f in font_manager.fontManager.ttflist if regex.search(f.fname)]
