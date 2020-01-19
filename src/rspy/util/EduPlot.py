@@ -85,6 +85,10 @@ class EduPlot2D(object):
             result.append(transMatrix.dot(item))
         return np.array(result)
 
+    def genSpaceFigure(self, xLim, yLim=None, title=None, transMatrix=None):
+        genSpace(xLim, yLim, title, transMatrix)
+        return  self._figure
+
     def genSpace(self, xLim, yLim=None, title=None, transMatrix=None):
         # input check
         if isinstance(xLim, int): xLim = [-xLim, xLim]
