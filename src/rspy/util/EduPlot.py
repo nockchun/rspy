@@ -132,6 +132,10 @@ class EduPlot2D(object):
             array = np.array(array)
             pyplot.plot(array[:,0], array[:,1], item[name]["color"])
         
+        item = self._items["xydata"]
+        for name in item:
+            pyplot.plot(item[name]["x"], item[name]["y"], item[name]["color"])
+        
         item = self._items["markers"]
         for name in item:
             positions = self._transVector(transMatrix, item[name]["positions"])
@@ -168,6 +172,9 @@ class EduPlot2D(object):
     
     def addFunction(self, expX_ForY="x**2", linespace=100, name="function", color="#FF0000"):
         self._items["functions"][name] = {"expression":expX_ForY, "linespace":linespace, "color":color}
+        
+    def addXYData(self, x, y, name="xydata", color="#0000FF"):
+        self._items["xydata"][name] = {"x":x, "y":y, "color":color}
         
     def addMarker(self, positions, mark=".", name="marker", color="#00FF00"):
         positions = np.array(positions)
