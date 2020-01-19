@@ -23,6 +23,8 @@ class EduPlotConf(object):
         self.quiverParams = quiverParams
         self.axisParam = axisParam
         self.tickFontSize = tickFontSize
+
+        return self
         
     def set(self):
         rc("font", family=self.font, size=self.fontSize)
@@ -31,6 +33,8 @@ class EduPlotConf(object):
         rc("axes", titlesize=self.axisParam["titlesize"], titleweight=self.axisParam["titleweight"], unicode_minus=self.axisParam["unicode_minus"])
         rc('xtick', labelsize=self.tickFontSize)
         rc('ytick', labelsize=self.tickFontSize)
+
+        return pyplot
 
     def getFontsList(self, hintRegex=""):
         regex = re.compile(hintRegex, re.IGNORECASE)
