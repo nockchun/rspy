@@ -32,8 +32,6 @@ class EduPlotConf(object):
         rc('xtick', labelsize=self.tickFontSize)
         rc('ytick', labelsize=self.tickFontSize)
 
-        return pyplot
-
     def getFontsList(self, hintRegex=""):
         regex = re.compile(hintRegex, re.IGNORECASE)
         return [{f.name: f.fname} for f in font_manager.fontManager.ttflist if regex.search(f.fname)]
