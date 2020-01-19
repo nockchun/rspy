@@ -1,6 +1,7 @@
 import numpy as np
-from matplotlib import pyplot, ticker, get_backend, rc
+from matplotlib import pyplot, ticker, get_backend, rc, font_manager
 from functools import wraps
+import re
 
 class EduPlotConf(object):
     def __init__(
@@ -26,6 +27,10 @@ class EduPlotConf(object):
         rc('figure', dpi=self.dpi)
         rc('lines', linewidth=self.lineWidth, markersize=self.markerSize)
         rc('axes', titlesize=self.titleParam["titlesize"], titleweight=self.titleParam["titleweight"])
+
+    def getFontsList(self, hintRegex=""):
+        regex = re.compile(hintRegex, re.IGNORECASE)
+        return [{f.name: f.fname} for f in font_manager.fontManager.ttflist if regex.search(f.fname)]
 
 
 class EduPlot2D(object):
