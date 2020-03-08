@@ -8,4 +8,4 @@ def genSequence(data, windowSize, labelSize=1):
     for idx in range(1, labelSize):
         lastIdx = labelSize-idx-1
         seqLabel = np.concatenate([seqLabel, data[windowSize+idx:-lastIdx if lastIdx > 0 else None].reshape(-1, 1)], axis=1)
-    return seqData, seqLabel
+    return seqData.reshape(-1, windowSize, 1), seqLabel.reshape(-1, labelSize, 1)
