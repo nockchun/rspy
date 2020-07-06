@@ -51,5 +51,5 @@ def setSystemWarning(off=True):
     warnings.filterwarnings(action="ignore" if off else "default")
     logging.getLogger("tensorflow").setLevel(logging.FATAL if off else logging.INFO)
 
-def dfPrintAll(dataframe):
+def printDataframeAllRow(dataframe):
     display(HTML(dataframe.to_html()))
