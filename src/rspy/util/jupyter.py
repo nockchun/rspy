@@ -1,6 +1,7 @@
 import math, re, warnings, logging
 import ipywidgets as ipw
 from matplotlib import font_manager
+from IPython.core.display import HTML
 
 def showMulti(*args, colSize=None, width="100%", margin="3px"):
     """Display multiple output data lines and columns as desired.
@@ -50,4 +51,5 @@ def setSystemWarning(off=True):
     warnings.filterwarnings(action="ignore" if off else "default")
     logging.getLogger("tensorflow").setLevel(logging.FATAL if off else logging.INFO)
 
-
+def dfPrintAll(dataframe):
+    display(HTML(dataframe.to_html()))
