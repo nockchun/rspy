@@ -22,6 +22,19 @@ class PGManager(object):
     def setMapper(self, xmlMapperFile):
         self._mapper, _ = mybatis_mapper2sql.create_mapper(xml=xmlMapperFile)
 
+    def sql(self, sql):
+        try:
+            connection = self.__connection_pool.getconn()
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            records = cursor.fetchall()
+            cursor.close()
+            self.__connection_pool.putconn(connection)
+
+            return records
+        except:
+            traceback.print_exc()
+
     def query(self, mapId, params=None):
         try:
             connection = self.__connection_pool.getconn()
