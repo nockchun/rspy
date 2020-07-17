@@ -54,7 +54,7 @@ class PGManager(object):
             connection = self.__connection_pool.getconn()
             cursor = connection.cursor()
             statement = mybatis_mapper2sql.get_child_statement(self._mapper, mapId)
-            cursor.execute(statement, params)
+            cursor.execute(statement, [params])
             records = cursor.fetchall()
             cursor.close()
             self.__connection_pool.putconn(connection)
@@ -67,13 +67,13 @@ class PGManager(object):
         try:
             connection = self.__connection_pool.getconn()
             statement = mybatis_mapper2sql.get_child_statement(self._mapper, mapId)
-            df = pd.read_sql(statement, connection, params=params)
+            df = pd.read_sql(statement, connection, params=[params])
             self.__connection_pool.putconn(connection)
 
             if dtype is not None:
                 df = df.astype(dtype)
 
-            return records
+            return df
         except:
             traceback.print_exc()
 
