@@ -36,11 +36,14 @@ class PGManager(object):
         except:
             traceback.print_exc()
 
-    def sqlPandas(self, sql):
+    def sqlPandas(self, sql, dtype=None):
         try:
             connection = self.__connection_pool.getconn()
             df = pd.read_sql(sql, connection)
             self.__connection_pool.putconn(connection)
+
+            if dtype is not None:
+                df = df.astype(type)
 
             return df
         except:
@@ -60,12 +63,15 @@ class PGManager(object):
         except:
             traceback.print_exc()
 
-    def queryPandas(self, mapId, params=None):
+    def queryPandas(self, mapId, params=None, dtype=None):
         try:
             connection = self.__connection_pool.getconn()
             statement = mybatis_mapper2sql.get_child_statement(self._mapper, mapId)
-            df = pd.read_sql(statement, connection)
+            df = pd.read_sql(statement, connection, params=params)
             self.__connection_pool.putconn(connection)
+
+            if dtype is not None:
+                df = df.astype(type)
 
             return records
         except:
