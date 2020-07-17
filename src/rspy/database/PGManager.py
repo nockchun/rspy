@@ -1,6 +1,7 @@
 from psycopg2 import pool
 import mybatis_mapper2sql
 import traceback
+import pandas as pd
 
 class PGManager(object):
     def __new__(self):
@@ -35,6 +36,16 @@ class PGManager(object):
         except:
             traceback.print_exc()
 
+    def sqlPandas(self, sql):
+        try:
+            connection = self.__connection_pool.getconn()
+            df = pd.read_sql(sql, connection)
+            self.__connection_pool.putconn(connection)
+
+            return df
+        except:
+            traceback.print_exc()
+
     def query(self, mapId, params=None):
         try:
             connection = self.__connection_pool.getconn()
@@ -43,6 +54,17 @@ class PGManager(object):
             cursor.execute(statement, params)
             records = cursor.fetchall()
             cursor.close()
+            self.__connection_pool.putconn(connection)
+
+            return records
+        except:
+            traceback.print_exc()
+
+    def queryPandas(self, mapId, params=None):
+        try:
+            connection = self.__connection_pool.getconn()
+            statement = mybatis_mapper2sql.get_child_statement(self._mapper, mapId)
+            df = pd.read_sql(statement, connection)
             self.__connection_pool.putconn(connection)
 
             return records
