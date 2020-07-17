@@ -43,7 +43,7 @@ class PGManager(object):
             self.__connection_pool.putconn(connection)
 
             if dtype is not None:
-                df = df.astype(type)
+                df = df.astype(dtype)
 
             return df
         except:
@@ -71,7 +71,7 @@ class PGManager(object):
             self.__connection_pool.putconn(connection)
 
             if dtype is not None:
-                df = df.astype(type)
+                df = df.astype(dtype)
 
             return records
         except:
