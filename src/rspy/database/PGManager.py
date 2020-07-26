@@ -54,7 +54,7 @@ class PGManager(object):
             connection = self.__connection_pool.getconn()
             cursor = connection.cursor()
             statement = mybatis_mapper2sql.get_child_statement(self._mapper, mapId)
-            cursor.execute(statement, params)
+            cursor.execute(statement, [params])
             records = cursor.fetchall()
             cursor.close()
             self.__connection_pool.putconn(connection)
