@@ -9,8 +9,9 @@ class Correlationer:
         self._corrListPositive = None
         self._corrListNegative = None
     
-    def fit(self, dataframe, targetColumns, combine=True):
+    def fit(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
         self._targetColumns = targetColumns
+        self._removeOriginColumn = removeOriginColumn
         corr = dataframe[targetColumns].corr(method=self._method)
         corrColumB, corrRowB = np.where(corr.to_numpy() > self._critical)
         corrColumS, corrRowS = np.where(corr.to_numpy() < -self._critical)
@@ -31,16 +32,18 @@ class Correlationer:
         if combine:
             self._corrListPositive = self._combine(self._corrListPositive)
             self._corrListNegative = self._combine(self._corrListNegative)
-            
+        
         return self._corrListPositive, self._corrListNegative
     
     def generate(self, dataframe):
+        self._generatedColumns = []
         for item in self._corrListPositive:
             vals = []
             for name in item:
                 vals.append(dataframe[name].astype(float))
             colName = "_".join(item)
             dataframe[colName] = self._all_diff(vals)
+            self._generatedColumns.append(colName)
     
         for item in self._corrListNegative:
             vals = []
@@ -48,12 +51,22 @@ class Correlationer:
                 vals.append(dataframe[name].astype(float))
             colName = "_".join(item)
             dataframe[colName] = self._all_diff(vals)
+            self._generatedColumns.append(colName)
+
+        if self._removeOriginColumn:
+            dataframe.columns.drop([this._targetColumns])
+            self._targetColumns = []
         
-        
-    def fit_generate(self, dataframe, targetColumns, combine=True):
+    def fit_generate(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
         self.fit(dataframe, targetColumns, combine)
         self.generate(dataframe)
     
+    def getColumnsTarget(self):
+        return self._targetColumns
+
+    def getColumnsGenerated(self):
+        return self._generatedColumns
+
     def _combine(self, corrList):
         res = []
         for item in corrList:
@@ -81,7 +94,7 @@ class Correlationer:
             diff += abs(my - item)
 
         return diff
-        
+
     def getCorrelationList(self):
         return self._corrListPositive, self._corrListNegative
     
