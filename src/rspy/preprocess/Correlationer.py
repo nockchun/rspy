@@ -58,7 +58,7 @@ class Correlationer:
             self._targetColumns = []
         
     def fit_generate(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
-        self.fit(dataframe, targetColumns, combine)
+        self.fit(dataframe, targetColumns, combine, removeOriginColumn)
         self.generate(dataframe)
     
     def getColumnsTarget(self):
