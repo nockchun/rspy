@@ -9,8 +9,9 @@ class Correlationer:
         self._corrListPositive = None
         self._corrListNegative = None
     
-    def fit(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
+    def fit(self, dataframe, targetColumns, combine=True, removeCombineColumn=False, removeOriginColumn=False):
         self._targetColumns = targetColumns
+        self._removeCombineColumn = removeCombineColumn
         self._removeOriginColumn = removeOriginColumn
         corr = dataframe[targetColumns].corr(method=self._method)
         corrColumB, corrRowB = np.where(corr.to_numpy() > self._critical)
@@ -18,16 +19,23 @@ class Correlationer:
         
         self._corrListPositive = []
         self._corrListNegative = []
+        self._combinedColumns = set()
         for position in zip(corrColumB, corrRowB):
             if position[0] < position[1]:
                 name1 = targetColumns[position[0]]
                 name2 = targetColumns[position[1]]
                 self._corrListPositive.append([name1, name2])
+                self._combinedColumns.add(name1)
+                self._combinedColumns.add(name2)
         for position in zip(corrColumS, corrRowS):
             if position[0] < position[1]:
                 name1 = targetColumns[position[0]]
                 name2 = targetColumns[position[1]]
                 self._corrListNegative.append([name1, name2])
+                self._combinedColumns.add(name1)
+                self._combinedColumns.add(name2)
+        self._combinedColumns = list(self._combinedColumns)
+        print(self._combinedColumns)
         
         if combine:
             self._corrListPositive = self._combine(self._corrListPositive)
@@ -55,9 +63,12 @@ class Correlationer:
 
         if self._removeOriginColumn:
             dataframe.drop(self._targetColumns, axis=1, inplace=True)
+
+        if self._removeCombineColumn:
+            dataframe.drop(self._combinedColumns, axis=1, inplace=True)
         
-    def fit_generate(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
-        self.fit(dataframe, targetColumns, combine, removeOriginColumn)
+    def fit_generate(self, dataframe, targetColumns, combine=True, removeCombineColumn=False, removeOriginColumn=False):
+        self.fit(dataframe, targetColumns, combine, removeCombineColumn, removeOriginColumn)
         self.generate(dataframe)
     
     def getColumnsTarget(self):
@@ -67,10 +78,14 @@ class Correlationer:
         return self._generatedColumns
 
     def getColumns(self):
+        result = set(self._targetColumns.tolist() + self._generatedColumns)
+
         if self._removeOriginColumn:
-            return self._generatedColumns
-        else:
-            return self._targetColumns.tolist() + self._generatedColumns
+            result -= set(self._targetColumns)
+        if self._removeCombineColumn:
+            result -= set(self._combinedColumns)
+
+        return list(result)
     
     def _combine(self, corrList):
         res = []
