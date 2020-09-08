@@ -70,8 +70,8 @@ class Correlationer:
         if self._removeOriginColumn:
             return self._generatedColumns
         else:
-            return self._targetColumns + self._generatedColumns
-
+            return self._targetColumns.tolist() + self._generatedColumns
+    
     def _combine(self, corrList):
         res = []
         for item in corrList:
