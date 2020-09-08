@@ -35,7 +35,6 @@ class Correlationer:
                 self._combinedColumns.add(name1)
                 self._combinedColumns.add(name2)
         self._combinedColumns = list(self._combinedColumns)
-        print(self._combinedColumns)
         
         if combine:
             self._corrListPositive = self._combine(self._corrListPositive)
