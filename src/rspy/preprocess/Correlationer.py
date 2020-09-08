@@ -54,8 +54,7 @@ class Correlationer:
             self._generatedColumns.append(colName)
 
         if self._removeOriginColumn:
-            dataframe.columns.drop([this._targetColumns])
-            self._targetColumns = []
+            dataframe.drop(self._targetColumns, axis=1, inplace=True)
         
     def fit_generate(self, dataframe, targetColumns, combine=True, removeOriginColumn=False):
         self.fit(dataframe, targetColumns, combine, removeOriginColumn)
@@ -66,6 +65,12 @@ class Correlationer:
 
     def getColumnsGenerated(self):
         return self._generatedColumns
+
+    def getColumns(self):
+        if self._removeOriginColumn:
+            return self._generatedColumns
+        else:
+            return self._targetColumns + self._generatedColumns
 
     def _combine(self, corrList):
         res = []
@@ -99,4 +104,4 @@ class Correlationer:
         return self._corrListPositive, self._corrListNegative
     
     def __repr__(self):
-        return f'{self._methd}[critical: {self._critical}, positive: {self._corrListPositive}, negative: {self._corrListNegative}]'
+        return f'{self._method}[critical: {self._critical}, positive: {self._corrListPositive}, negative: {self._corrListNegative}]'
