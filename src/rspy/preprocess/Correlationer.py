@@ -9,7 +9,7 @@ class Correlationer:
         self._corrListPositive = None
         self._corrListNegative = None
     
-    def fit(self, dataframe, targetColumns, combine=True, removeCombineColumn=False, removeOriginColumn=False):
+    def fit(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeOriginColumn=False):
         self._targetColumns = targetColumns
         self._removeCombineColumn = removeCombineColumn
         self._removeOriginColumn = removeOriginColumn
