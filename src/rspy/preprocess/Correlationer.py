@@ -110,7 +110,7 @@ class Correlationer:
         if len(other) > 1:
             diff += self._all_diff(other)
         for item in other:
-            diff += abs(my - item)
+            diff += item - my
 
         return diff
 
