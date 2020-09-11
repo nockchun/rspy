@@ -67,9 +67,9 @@ class Correlationer:
         if self._removeCombineColumn:
             dataframe.drop(self._combinedColumns, axis=1, inplace=True)
         
-    def fit_generate(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeOriginColumn=False):
+    def fit_generate(self, dataframe, targetColumns, maWindow=2, combine=False, removeCombineColumn=False, removeOriginColumn=False):
         self.fit(dataframe, targetColumns, combine, removeCombineColumn, removeOriginColumn)
-        self.generate(dataframe)
+        self.generate(dataframe, maWindow)
     
     def getColumnsTarget(self):
         return self._targetColumns
