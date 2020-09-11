@@ -13,9 +13,10 @@ class Correlationer:
         self._targetColumns = targetColumns
         self._removeCombineColumn = removeCombineColumn
         self._removeOriginColumn = removeOriginColumn
-        corr = dataframe[targetColumns].corr(method=self._method)
-        corrColumB, corrRowB = 1 > np.where(corr.to_numpy() > self._critical)
-        corrColumS, corrRowS = -1 < np.where(corr.to_numpy() < -self._critical)
+        corr = dataframe[targetColumns].corr(method=self._method).to_numpy()
+
+        corrColumB, corrRowB = np.where((corr > self._critical) & (corr < 1))
+        corrColumS, corrRowS = np.where((corr < -self._critical) & (corr > -1))
         
         self._corrListPositive = []
         self._corrListNegative = []
