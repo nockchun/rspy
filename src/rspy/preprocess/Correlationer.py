@@ -3,9 +3,10 @@ import pandas as pd
 import copy
 
 class Correlationer:
-    def __init__(self, method="pearson", critical=0.7):
+    def __init__(self, method="pearson", critical=0.7, movingAverageWindow=2):
         self._method = method
         self._critical = critical
+        self._movingAverageWindow = movingAverageWindow
         self._corrListPositive = None
         self._corrListNegative = None
     
@@ -43,14 +44,14 @@ class Correlationer:
         
         return self._corrListPositive, self._corrListNegative
     
-    def generate(self, dataframe, maWindow=2):
+    def generate(self, dataframe):
         self._generatedColumns = []
         for item in self._corrListPositive:
             vals = []
             for name in item:
                 vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
-            dataframe[colName] = self._all_diff(vals, maWindow)
+            dataframe[colName] = self._all_diff(vals)
             self._generatedColumns.append(colName)
     
         for item in self._corrListNegative:
@@ -58,7 +59,7 @@ class Correlationer:
             for name in item:
                 vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
-            dataframe[colName] = self._all_diff(vals, maWindow)
+            dataframe[colName] = self._all_diff(vals)
             self._generatedColumns.append(colName)
 
         if self._removeOriginColumn:
@@ -67,9 +68,9 @@ class Correlationer:
         if self._removeCombineColumn:
             dataframe.drop(self._combinedColumns, axis=1, inplace=True)
         
-    def fit_generate(self, dataframe, targetColumns, maWindow=2, combine=False, removeCombineColumn=False, removeOriginColumn=False):
+    def fit_generate(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeOriginColumn=False):
         self.fit(dataframe, targetColumns, combine, removeCombineColumn, removeOriginColumn)
-        self.generate(dataframe, maWindow)
+        self.generate(dataframe)
     
     def getColumnsTarget(self):
         return self._targetColumns
@@ -104,17 +105,17 @@ class Correlationer:
             if isNew: res.append([item, item[1]])
         return sorted(np.array(res)[:,0].tolist())
     
-    def _all_diff(self, vals, maWindow):
+    def _all_diff(self, vals):
         my = vals[0]
         other = vals[1:]
 
         diff = 0
         if len(other) > 1:
-            diff += self._all_diff(other, maWindow)
+            diff += self._all_diff(other)
         
-        myMA = self._moving_everage(my, maWindow)
+        myMA = self._moving_everage(my, self._movingAverageWindow)
         for item in other:
-            diff += self._moving_everage(item, maWindow) - myMA
+            diff += self._moving_everage(item, self._movingAverageWindow) - myMA
 
         return diff
     
