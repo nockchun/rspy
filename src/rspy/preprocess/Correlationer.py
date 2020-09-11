@@ -47,7 +47,7 @@ class Correlationer:
         for item in self._corrListPositive:
             vals = []
             for name in item:
-                vals.append(dataframe[name].astype(float))
+                vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
             dataframe[colName] = self._all_diff(vals)
             self._generatedColumns.append(colName)
@@ -55,7 +55,7 @@ class Correlationer:
         for item in self._corrListNegative:
             vals = []
             for name in item:
-                vals.append(dataframe[name].astype(float))
+                vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
             dataframe[colName] = self._all_diff(vals)
             self._generatedColumns.append(colName)
@@ -105,15 +105,18 @@ class Correlationer:
     
     def _all_diff(self, vals):
         my = vals[0]
+        myPrev = np.insert(my[:-1], 0, my[0])
         other = vals[1:]
+
         diff = 0
         if len(other) > 1:
             diff += self._all_diff(other)
         for item in other:
-            diff += item - my
+            itemPrev = np.insert(item[:-1], 0, item[0])
+            diff += (item - itemPrev) - (my - myPrev)
 
         return diff
-
+    
     def getCorrelationList(self):
         return self._corrListPositive, self._corrListNegative
     
