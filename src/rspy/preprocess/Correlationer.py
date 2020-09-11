@@ -113,7 +113,7 @@ class Correlationer:
             diff += self._all_diff(other)
         for item in other:
             itemPrev = np.insert(item[:-1], 0, item[0])
-            diff += (item - itemPrev) - (my - myPrev)
+            diff += abs(item - itemPrev) + abs(my - myPrev)
 
         return diff
     
