@@ -43,14 +43,14 @@ class Correlationer:
         
         return self._corrListPositive, self._corrListNegative
     
-    def generate(self, dataframe):
+    def generate(self, dataframe, maWindow=2):
         self._generatedColumns = []
         for item in self._corrListPositive:
             vals = []
             for name in item:
                 vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
-            dataframe[colName] = self._all_diff(vals)
+            dataframe[colName] = self._all_diff(vals, maWindow)
             self._generatedColumns.append(colName)
     
         for item in self._corrListNegative:
@@ -58,7 +58,7 @@ class Correlationer:
             for name in item:
                 vals.append(dataframe[name].astype(float).values)
             colName = "_".join(item)
-            dataframe[colName] = self._all_diff(vals)
+            dataframe[colName] = self._all_diff(vals, maWindow)
             self._generatedColumns.append(colName)
 
         if self._removeOriginColumn:
@@ -104,20 +104,34 @@ class Correlationer:
             if isNew: res.append([item, item[1]])
         return sorted(np.array(res)[:,0].tolist())
     
-    def _all_diff(self, vals):
+    def _all_diff(self, vals, maWindow):
         my = vals[0]
-        myPrev = np.insert(my[:-1], 0, my[0])
         other = vals[1:]
 
         diff = 0
         if len(other) > 1:
-            diff += self._all_diff(other)
+            diff += self._all_diff(other, maWindow)
+        
+        myMA = self._moving_everage(my, maWindow)
         for item in other:
-            itemPrev = np.insert(item[:-1], 0, item[0])
-            diff += abs(item - itemPrev) + abs(my - myPrev)
+            diff += self._moving_everage(item, maWindow) - myMA
 
         return diff
     
+    def _moving_everage(self, vals, windows):
+        stepVals = []
+        stepVals.append(vals)
+        temp = vals
+        for idx in range(windows):
+            temp = np.insert(temp[:-1], 0, temp[0])
+            stepVals.append(temp)
+        
+        result = np.zeros([len(vals)])
+        for idx in range(windows-1):
+            result += abs(stepVals[idx] - stepVals[idx+1])
+        
+        return result/2
+
     def getCorrelationList(self):
         return self._corrListPositive, self._corrListNegative
     
