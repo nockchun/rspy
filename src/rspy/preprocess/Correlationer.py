@@ -14,8 +14,8 @@ class Correlationer:
         self._removeCombineColumn = removeCombineColumn
         self._removeOriginColumn = removeOriginColumn
         corr = dataframe[targetColumns].corr(method=self._method)
-        corrColumB, corrRowB = np.where(corr.to_numpy() > self._critical)
-        corrColumS, corrRowS = np.where(corr.to_numpy() < -self._critical)
+        corrColumB, corrRowB = 1 > np.where(corr.to_numpy() > self._critical)
+        corrColumS, corrRowS = -1 < np.where(corr.to_numpy() < -self._critical)
         
         self._corrListPositive = []
         self._corrListNegative = []
