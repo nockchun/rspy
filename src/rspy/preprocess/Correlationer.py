@@ -90,6 +90,9 @@ class Correlationer:
     
     def _combine(self, corrList):
         res = []
+        if len(corrList) == 0:
+            return res
+
         for item in corrList:
             isNew = True
             item = copy.copy(item)
