@@ -122,6 +122,10 @@ class Correlationer:
 
         return diff
     
+    def transMovingDiffAverage(self, dataframe, targetColumns, windows=3):
+        for colum in targetColumns:
+            dataframe[colum] = self._moving_everage(dataframe[colum].values, windows)
+    
     def _moving_everage(self, vals, windows):
         stepVals = []
         stepVals.append(vals)
@@ -131,10 +135,10 @@ class Correlationer:
             stepVals.append(temp)
         
         result = np.zeros([len(vals)])
-        for idx in range(windows-1):
-            result += abs(stepVals[idx] - stepVals[idx+1])
+        for idx in range(windows):
+            result += stepVals[idx] - stepVals[idx+1]
         
-        return result/2
+        return result/windows
 
     def getCorrelationList(self):
         return self._corrListPositive, self._corrListNegative
