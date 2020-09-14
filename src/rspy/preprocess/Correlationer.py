@@ -116,17 +116,25 @@ class Correlationer:
         if len(other) > 1:
             diff += self._all_diff(other)
         
-        myMA = self._moving_everage(my, self._movingAverageWindow)
+        myMA = self._moving_average(my, self._movingAverageWindow)
         for item in other:
-            diff += self._moving_everage(item, self._movingAverageWindow) - myMA
+            diff += self._moving_average(item, self._movingAverageWindow) - myMA
 
         return diff
     
     def transMovingDiffAverage(self, dataframe, targetColumns, windows=3):
         for colum in targetColumns:
-            dataframe[colum] = self._moving_everage(dataframe[colum].values, windows)
+            dataframe[colum] = self._moving_average(dataframe[colum].values, windows)
     
-    def _moving_everage(self, vals, windows):
+    def _moving_average(self, vals, windows=5, weightMax=5):
+        # 가중이동평균을 위한 가중값 생성
+        weights = np.ones(windows)
+        if windows < weightMax:
+            weightMax = windows
+        for idx in range(weightMax):
+            weights[idx] = weightMax-idx
+
+        # 가중 이동평균 계산
         stepVals = []
         stepVals.append(vals)
         temp = vals
@@ -135,10 +143,10 @@ class Correlationer:
             stepVals.append(temp)
         
         result = np.zeros([len(vals)])
-        for idx in range(windows):
-            result += stepVals[idx] - stepVals[idx+1]
+        for idx, weight in zip(range(windows), weights):
+            result += (stepVals[idx]*weight) - (stepVals[idx+1]*(1 if weight == 1 else weight-1))
         
-        return result/windows
+        return result/weights.sum()
 
     def getCorrelationList(self):
         return self._corrListPositive, self._corrListNegative
