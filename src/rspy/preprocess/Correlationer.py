@@ -3,10 +3,11 @@ import pandas as pd
 import copy
 
 class Correlationer:
-    def __init__(self, method="pearson", critical=0.7, movingAverageWindow=2):
+    def __init__(self, method="pearson", critical=0.7, movingAverageWindow=2, movingWeightMax=2):
         self._method = method
         self._critical = critical
         self._movingAverageWindow = movingAverageWindow
+        self._movingWeightMax = movingWeightMax
         self._corrListPositive = None
         self._corrListNegative = None
     
@@ -126,11 +127,10 @@ class Correlationer:
         for colum in targetColumns:
             dataframe[colum] = self._moving_average(dataframe[colum].values, windows)
     
-    def _moving_average(self, vals, windows=5, weightMax=5):
+    def _moving_average(self, vals, windows=5):
         # 가중이동평균을 위한 가중값 생성
         weights = np.ones(windows)
-        if windows < weightMax:
-            weightMax = windows
+        weightMax = windows if windows < self._movingWeightMax else self._movingWeightMax
         for idx in range(weightMax):
             weights[idx] = weightMax-idx
 
