@@ -144,8 +144,8 @@ class Correlationer:
         stepVals.reverse()
         
         result = np.zeros([len(vals)])
-        for idx in range(windows):
-            result += (stepVals[idx]*weights[idx]) - (stepVals[idx+1]**weights[idx+1])
+        for idx, weight in zip(range(windows), weights):
+            result += (stepVals[idx]*weight) - (stepVals[idx+1]*(1 if weight == 1 else weight-1))
         
         return result/weights.sum()
 
