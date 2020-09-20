@@ -11,9 +11,10 @@ class Correlationer:
         self._corrListPositive = None
         self._corrListNegative = None
     
-    def fit(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeOriginColumn=False):
+    def fit(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeSubCombineColumn=True, removeOriginColumn=False):
         self._targetColumns = targetColumns
         self._removeCombineColumn = removeCombineColumn
+        self._removeSubCombineColumn = removeSubCombineColumn
         self._removeOriginColumn = removeOriginColumn
         corr = dataframe[targetColumns].corr(method=self._method).to_numpy()
 
@@ -69,8 +70,8 @@ class Correlationer:
         if self._removeCombineColumn:
             dataframe.drop(self._combinedColumns, axis=1, inplace=True)
         
-    def fit_generate(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeOriginColumn=False):
-        self.fit(dataframe, targetColumns, combine, removeCombineColumn, removeOriginColumn)
+    def fit_generate(self, dataframe, targetColumns, combine=False, removeCombineColumn=False, removeSubCombineColumn=True, removeOriginColumn=False):
+        self.fit(dataframe, targetColumns, combine, removeCombineColumn, removeSubCombineColumn, removeOriginColumn)
         self.generate(dataframe)
     
     def getColumnsTarget(self):
@@ -106,7 +107,10 @@ class Correlationer:
                     x[1] = item[1]
                     isNew = False
                     break
-            if isNew: res.append([item, item[1]])
+            if isNew:
+                res.append([item, item[1]])
+            elif self._removeSubCombineColumn == False:
+                res.append([item, item[1]])
         return sorted(np.array(res)[:,0].tolist())
     
     def _all_diff(self, vals):
