@@ -145,7 +145,6 @@ class Correlationer:
         for idx in range(windows):
             temp = np.insert(temp[:-1], 0, temp[0])
             stepVals.append(temp)
-        stepVals.reverse()
         
         result = np.zeros([len(vals)])
         for idx, weight in zip(range(windows), weights):
