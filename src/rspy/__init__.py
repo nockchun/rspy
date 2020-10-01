@@ -3,6 +3,7 @@ from pkg_resources import get_distribution, DistributionNotFound
 from .util import *
 from .preprocess import *
 from .database import *
+from .visual import *
 
 try:
     # Change here if project is renamed and does not equal the package name
