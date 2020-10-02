@@ -21,7 +21,7 @@ def plotHistory(history, figsize=(12, 4)):
     if 'accuracy' in histKeys:
         plt.subplot(1, plotCnt, subPosition)
         plt.plot(history.history['accuracy'], 'g-', label='accuracy')
-        if 'val_loss' in histKeys:
+        if 'val_accuracy' in histKeys:
             plt.plot(history.history['val_accuracy'], 'k--', label='val_accuracy')
         plt.xlabel('Epoch')
         plt.ylim(0.7, 1)
