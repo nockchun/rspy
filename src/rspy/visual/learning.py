@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 def plotHistory(history, figsize=(12, 4)):
     plt.figure(figsize=figsize)
-
+    plt.style.use("ggplot")
     histKeys = history.history.keys()
     plotCnt = 0
     if 'loss' in histKeys: plotCnt += 1
