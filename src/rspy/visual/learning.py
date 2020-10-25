@@ -11,20 +11,19 @@ def plotHistory(history, figsize=(12, 4)):
     subPosition = 1
     if 'loss' in histKeys:
         plt.subplot(1, plotCnt, subPosition)
-        plt.plot(history.history['loss'], 'b-', label='loss')
-        if 'val_loss' in histKeys:
-            plt.plot(history.history['val_loss'], 'r--', label='val_loss')
+        plt.plot(history.history['loss'], 'r-', label='loss')
+        plt.plot(history.history['accuracy'], 'g-', label='accuracy')
+        plt.title("Training Loss and Accuracy")
         plt.xlabel('Epoch')
         plt.legend()
         subPosition += 1
 
-    if 'accuracy' in histKeys:
+    if 'val_loss' in histKeys:
         plt.subplot(1, plotCnt, subPosition)
-        plt.plot(history.history['accuracy'], 'g-', label='accuracy')
-        if 'val_accuracy' in histKeys:
-            plt.plot(history.history['val_accuracy'], 'k--', label='val_accuracy')
+        plt.plot(history.history['val_loss'], 'r-', label='val_loss')
+        plt.plot(history.history['val_accuracy'], 'g-', label='val_accuracy')
+        plt.title("Validation Loss and Accuracy")
         plt.xlabel('Epoch')
-        plt.ylim(0.7, 1)
         plt.legend()
 
     plt.show()
