@@ -20,9 +20,11 @@ def getImageSliced(imageData, rowSliceCnt, colSliceCnt, stride=1):
 
     return np.array(images)
 
-def showImagesGrid(imageDatas, colCnt=None, rowCnt=None, gap=0.03, sigsize=5):
+def showImagesGrid(imageDatas, colCnt=None, rowCnt=None, gap=0.03, sigsize=5, cmap=None):
     plt.figure(figsize=(sigsize, sigsize))
     imgSize = len(imageDatas)
+    if cmap is None:
+        cmap = plt.get_cmap('gray')
     
     if rowCnt is None:
         if colCnt is None:
@@ -31,7 +33,7 @@ def showImagesGrid(imageDatas, colCnt=None, rowCnt=None, gap=0.03, sigsize=5):
         
     for idx in range(imgSize):
         plt.subplot(colCnt, rowCnt, idx+1)
-        plt.imshow(imageDatas[idx], cmap=color_map)
+        plt.imshow(imageDatas[idx], cmap=cmap)
         plt.axis("off")
     plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, 
                         wspace=gap, hspace=gap)
