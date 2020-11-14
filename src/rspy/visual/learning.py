@@ -26,4 +26,4 @@ def plotHistory(history, figsize=(12, 4)):
         plt.xlabel('Epoch')
         plt.legend()
 
-    return plt
+    plt.show()
