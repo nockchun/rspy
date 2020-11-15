@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def plotHistory(history, figsize=(8, 4)):
+def plotHistory(history, figsize=(12, 4)):
     plt.figure(figsize=figsize)
     plt.style.use("ggplot")
     histKeys = history.history.keys()
