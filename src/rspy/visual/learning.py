@@ -6,7 +6,7 @@ def plotHistory(history, figsize=(8, 4)):
     histKeys = history.history.keys()
     plotCnt = 0
     if 'loss' in histKeys: plotCnt += 1
-    if 'accuracy' in histKeys: plotCnt += 1
+    if 'val_loss' in histKeys: plotCnt += 1
     
     subPosition = 1
     if 'loss' in histKeys:
