@@ -2,9 +2,9 @@ import math, re, warnings, logging
 import tensorflow as tf
 import ipywidgets as ipw
 from matplotlib import font_manager
-from IPython.core.display import HTML
+import pandas as pd
 
-def showMulti(*args, colSize=None, width="100%", margin="3px"):
+def printMulti(*args, colSize=None, width="100%", margin="3px"):
     """Display multiple output data lines and columns as desired.
     Args:
       args: multiple datas.
