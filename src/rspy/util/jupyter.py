@@ -52,8 +52,9 @@ def setSystemWarning(off=True):
     warnings.filterwarnings(action="ignore" if off else "default")
     logging.getLogger("tensorflow").setLevel(logging.FATAL if off else logging.INFO)
 
-def printDataframeAllRow(dataframe):
-    display(HTML(dataframe.to_html()))
+def printDataframeAllRow(dataframe, sizeSample=None):
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.width', None):
+        display(dataframe if sizeSample is None else dataframe.sample(sizeSample))
 
 def fixMemoryProblem():
     gpus = tf.config.experimental.list_physical_devices('GPU')
