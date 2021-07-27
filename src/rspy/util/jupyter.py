@@ -1,4 +1,4 @@
-import math, re, warnings, logging
+import os, math, re, warnings, logging
 import tensorflow as tf
 import ipywidgets as ipw
 from matplotlib import font_manager
@@ -51,6 +51,7 @@ def getSystemFonts(hintRegex=""):
 def setSystemWarning(off=True):
     warnings.filterwarnings(action="ignore" if off else "default")
     logging.getLogger("tensorflow").setLevel(logging.FATAL if off else logging.INFO)
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = "2" if off else "0"
 
 def printDataframeAllRow(dataframe, sizeSample=None):
     with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.width', None):
