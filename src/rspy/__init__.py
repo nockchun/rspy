@@ -5,6 +5,9 @@ from .preprocess import *
 from .database import *
 from .visual import *
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = "2"
+
 try:
     # Change here if project is renamed and does not equal the package name
     dist_name = __name__
